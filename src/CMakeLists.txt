@@ -1,3 +1,6 @@
 cmake_minimum_required(VERSION 2.8.9)
+set (CMAKE_CXX_STANDARD 11)
 project (Threader)
+find_package (Threads)
 add_executable(Threader Threader.cpp)
+target_link_libraries (Threader ${CMAKE_THREAD_LIBS_INIT})
