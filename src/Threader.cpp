@@ -42,7 +42,11 @@ int main(int argc, char *argv[])
   noecho();
   curs_set(FALSE);
 
-  make_ball(0);
+  thread t1(make_ball,0);
+  thread t2(make_ball,20);
 
+  t1.join();
+  t2.join();
+  
   endwin();
 }
