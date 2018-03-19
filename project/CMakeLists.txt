@@ -5,8 +5,8 @@ include_directories(include)
 
 find_package (Threads)
 find_package (Curses REQUIRED)
-file(GLOB SOURCES "./*.cpp")
+file(GLOB SOURCES "src/*.cpp")
 
-add_executable(Threader Threader.cpp)
+add_executable(Threader ${SOURCES})
 target_link_libraries (Threader ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries (Threader ${CURSES_LIBRARIES})

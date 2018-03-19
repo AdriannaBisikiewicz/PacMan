@@ -1,3 +1,3 @@
 FROM krystiankolad/so-ubuntu
 
-COPY src/. /workdir
+COPY project/. /workdir

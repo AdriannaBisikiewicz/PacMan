@@ -1,4 +1,4 @@
-#include "include/Ghost.h"
+#include "Ghost.h"
 using namespace std;
 
 Ghost::Ghost(){}

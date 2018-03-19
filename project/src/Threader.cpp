@@ -3,11 +3,10 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "include/Ghost.h"
+#include "Ghost.h"
 
 using namespace std;
 #define RDELAY 1
-Ghost ghost;
 
 void make_ball(int y, WINDOW *w, int delay)
 {
@@ -51,6 +50,7 @@ void refresh_screen(WINDOW *w)
 
 int main(int argc, char *argv[])
 {
+  Ghost *ghost;
   WINDOW *window; // potrzebujemy go, aby móx zrobić obramowanie 
   int maxx, maxy;
   initscr();
