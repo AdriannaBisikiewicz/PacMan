@@ -3,9 +3,11 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "include/Ghost.h"
 
 using namespace std;
 #define RDELAY 1
+Ghost ghost;
 
 void make_ball(int y, WINDOW *w, int delay)
 {
