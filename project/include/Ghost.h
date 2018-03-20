@@ -1,3 +1,4 @@
+#include <ncurses.h>
 class Ghost
 {
     int coordinate_x;
@@ -5,5 +6,5 @@ class Ghost
   public :
     Ghost();
     Ghost(int x, int y);
-    void moveFromSideToSide();
+    void moveFromSideToSide(WINDOW *w, int delay);
 };
