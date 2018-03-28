@@ -4,12 +4,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "Ghost.h"
+#include "MapProvider.h"
 
 using namespace std;
 #define RDELAY 1
-
-#define WIDTH 60
-#define HEIGHT 30
 
 // metoda, która w osobnym wątku odświeza nam nasze okno
 void refresh_screen(WINDOW *w)
@@ -26,54 +24,17 @@ int main(int argc, char *argv[])
 {
 
   WINDOW *window; // potrzebujemy go, aby móx zrobić obramowanie
+  MapProvider *mapProvider = new MapProvider();
   int maxx, maxy;
   initscr();
   noecho();
   curs_set(FALSE);
-  getmaxyx(stdscr, maxy, maxx);
-  char *map[HEIGHT][WIDTH+1] ={"                              |                             ",
-                               "                              |                             ",
-                               "        ----                  |               ----          ",
-                               "        |  |                  |               |  |          ",
-                               "        ----          -----------------       ----          ",
-                               "                                                            ",
-                               "                                                            ",
-                               "-------             ---------------------            -------",
-                               "                                                            ",
-                               "                                                            ",
-                               "       |            --------     --------           |       ",
-                               "       |            |                   |           |       ",
-                               "       |            |                   |           |       ",
-                               "       |            |                   |           |       ",
-                               "       |            ---------------------           |       ",
-                               "       |                                            |       ",
-                               "       |            ---------------------           |       ",
-                               "                              |                             ",
-                               "                              |                             ",
-                               "                              |                             ",
-                               "                                                            ",
-                               "     ------          ----           ----         ------     ",
-                               "       |                                            |       ",
-                               "       |                                            |       ",
-                               "                                                            ",
-                               "-----       |       ---------------------      |       -----",
-                               "            |                 |                |            ",
-                               "            |                 |                |            ",
-                               "      ----------              |             ----------      ",
-                               "                                                            "};
 
-  window = newwin(HEIGHT+2, WIDTH+2, 0, 0);
+  window = newwin(mapProvider->GetHeight()+2, mapProvider->GetWidth()+2, 0, 0);
   box(window, '|', '-'); // metoda tworząca obramowanie
   mvwaddstr(window, 0, 0, "");
-  for(int x=0;x<HEIGHT;x++)
-  {
-    for(int y = 0;y<WIDTH;y++)
-    {
-      mvwprintw(window, y+1, x+1, map[x][y]);
-    }
-  }
+  mapProvider->ApplyMap(window);
   wrefresh(window);
-wrefresh(window);
   // Ghost ghosts[4] = {Ghost(0, 5), Ghost(0, 8), Ghost(0, 14), Ghost(0, 23)};
 
   // thread t1(&Ghost::moveFromSideToSide, &ghosts[0], window, 10000);
