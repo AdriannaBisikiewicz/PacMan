@@ -75,7 +75,7 @@ void Ghost::moveFromSideToSide(WINDOW *w, int delay)
 
 void Ghost::Move(WINDOW *w, int delay)
 {
-    int prev_x = 0, prev_y = 0;
+    int prev_x = coordinate_x, prev_y = coordinate_y;
     while (1)
     {
         while(CantGo(w))
