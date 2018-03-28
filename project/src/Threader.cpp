@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
   window = newwin(mapProvider->GetHeight()+2, mapProvider->GetWidth()+2, 0, 0);
   box(window, '|', '-'); // metoda tworząca obramowanie
   mvwaddstr(window, 0, 0, "");
-  //mapProvider->ApplyMap(window);
+  mapProvider->ApplyMap(window);
   wrefresh(window);
   Ghost ghosts[4] = {Ghost(1, 1), Ghost(1, 29), Ghost(59, 1), Ghost(59, 29)};
 
