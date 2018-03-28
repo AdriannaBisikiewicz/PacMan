@@ -37,17 +37,17 @@ int main(int argc, char *argv[])
   wrefresh(window);
   Ghost ghosts[4] = {Ghost(0, 5), Ghost(0, 8), Ghost(0, 14), Ghost(0, 23)};
 
-  thread t1(&Ghost::moveFromSideToSide, &ghosts[0], window, 10000);
-  thread t2(&Ghost::moveFromSideToSide, &ghosts[1], window, 20000);
-  thread t3(&Ghost::moveFromSideToSide, &ghosts[2], window, 30000);
-  thread t4(&Ghost::moveFromSideToSide, &ghosts[3], window, 40000);
+  // thread t1(&Ghost::moveFromSideToSide, &ghosts[0], window, 10000);
+  // thread t2(&Ghost::moveFromSideToSide, &ghosts[1], window, 20000);
+  // thread t3(&Ghost::moveFromSideToSide, &ghosts[2], window, 30000);
+  // thread t4(&Ghost::moveFromSideToSide, &ghosts[3], window, 40000);
   // przerysowywanie ekranu
   thread t_r(refresh_screen, window);
 
-  t1.join();
-  t2.join();
-  t3.join();
-  t4.join();
+  // t1.join();
+  // t2.join();
+  // t3.join();
+  // t4.join();
 
   t_r.join();
 

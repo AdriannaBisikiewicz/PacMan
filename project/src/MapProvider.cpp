@@ -15,7 +15,7 @@ MapProvider::MapProvider()
 
 void MapProvider::ApplyMap(WINDOW *w)
 {
-    char *map[height][width+1] ={"                              |                             ",
+    char map[height][width+1] ={ "                              |                             ",
                                  "                              |                             ",
                                  "        ----                  |               ----          ",
                                  "        |  |                  |               |  |          ",
@@ -45,11 +45,11 @@ void MapProvider::ApplyMap(WINDOW *w)
                                  "            |                 |                |            ",
                                  "      ----------              |             ----------      ",
                                  "                                                            "};
-    for(int x=0;x<height;x++)
+    for(int x=0;x<width;x++)
     {
-        for(int y = 0;y<width;y++)
+        for(int y = 0;y<height;y++)
         {
-            mvwprintw(w, y+1, x+1, map[x][y]);
+            mvwaddch(w, y+1, x+1, map[y][x]);
         }
     }
 }
