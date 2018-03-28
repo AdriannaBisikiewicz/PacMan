@@ -17,18 +17,19 @@ bool Ghost::CantGo(WINDOW *w)
     bool result = true;
     switch(direction){
         case 1:
-            result = (mvwinch(w, coordinate_y, coordinate_x-1) == '|' && mvwinch(w, coordinate_y, coordinate_x-1) == '-');
+            result = (mvwinch(w, coordinate_y, coordinate_x-1) == '|' || mvwinch(w, coordinate_y, coordinate_x-1) == '-');
         break;
         case 2:
-            result = (mvwinch(w, coordinate_y+1, coordinate_x) == '|' && mvwinch(w,  coordinate_y+1, coordinate_x) == '-');
+            result = (mvwinch(w, coordinate_y+1, coordinate_x) == '|' || mvwinch(w,  coordinate_y+1, coordinate_x) == '-');
         break;
         case 3:
-            result = (mvwinch(w, coordinate_y, coordinate_x+1) == '|' && mvwinch(w, coordinate_y, coordinate_x+1) == '-');
+            result = (mvwinch(w, coordinate_y, coordinate_x+1) == '|' || mvwinch(w, coordinate_y, coordinate_x+1) == '-');
         break;
         case 4:
-            result = (mvwinch(w, coordinate_y-1, coordinate_x) == '|' && mvwinch(w,  coordinate_y-1, coordinate_x) == '-');
+            result = (mvwinch(w, coordinate_y-1, coordinate_x) == '|' || mvwinch(w,  coordinate_y-1, coordinate_x) == '-');
         break;
     }
+    return result;
 }
 
 Ghost::Ghost() {}
@@ -83,10 +84,6 @@ void Ghost::Move(WINDOW *w, int delay)
         }
         mvwprintw(w, prev_y, prev_x, " "); // nieładnie, ale zamiast czyścić cały ekran w poprzednie miejsce duszka wstawiamy pusty znak, przez co się nie krzaczy
         mvwprintw(w, coordinate_y, coordinate_x, "o");
-        // while(CantGo(w))
-        // {
-        //     ChangeDirection();
-        // }
         prev_y = coordinate_y;
         prev_x = coordinate_x;
         usleep(delay);
