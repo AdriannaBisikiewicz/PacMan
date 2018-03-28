@@ -8,6 +8,9 @@
 using namespace std;
 #define RDELAY 1
 
+#define WIDTH 30
+#define HEIGHT 30
+
 // metoda, która w osobnym wątku odświeza nam nasze okno
 void refresh_screen(WINDOW *w)
 {
@@ -28,25 +31,62 @@ int main(int argc, char *argv[])
   noecho();
   curs_set(FALSE);
   getmaxyx(stdscr, maxy, maxx);
+  char *map[HEIGHT][WIDTH+1] ={"------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------",
+                               "------------------------------"};
 
-  window = newwin(maxy, maxx, 0, 0);
+  window = newwin(HEIGHT+2, WIDTH+2, 0, 0);
   box(window, '|', '-'); // metoda tworząca obramowanie
   mvwaddstr(window, 0, 0, "");
+  for(int x=0;x<HEIGHT;x++)
+  {
+    for(int y = 0;y<WIDTH;y++)
+    {
+      mvwprintw(window, y+1, x+1, map[x][y]);
+    }
+  }
   wrefresh(window);
+wrefresh(window);
+  // Ghost ghosts[4] = {Ghost(0, 5), Ghost(0, 8), Ghost(0, 14), Ghost(0, 23)};
 
-  Ghost ghosts[4] = {Ghost(0, 5), Ghost(0, 8), Ghost(0, 14), Ghost(0, 23)};
-
-  thread t1(&Ghost::moveFromSideToSide, &ghosts[0], window, 10000);
-  thread t2(&Ghost::moveFromSideToSide, &ghosts[1], window, 20000);
-  thread t3(&Ghost::moveFromSideToSide, &ghosts[2], window, 30000);
-  thread t4(&Ghost::moveFromSideToSide, &ghosts[3], window, 40000);
+  // thread t1(&Ghost::moveFromSideToSide, &ghosts[0], window, 10000);
+  // thread t2(&Ghost::moveFromSideToSide, &ghosts[1], window, 20000);
+  // thread t3(&Ghost::moveFromSideToSide, &ghosts[2], window, 30000);
+  // thread t4(&Ghost::moveFromSideToSide, &ghosts[3], window, 40000);
   // przerysowywanie ekranu
   thread t_r(refresh_screen, window);
 
-  t1.join();
-  t2.join();
-  t3.join();
-  t4.join();
+  // t1.join();
+  // t2.join();
+  // t3.join();
+  // t4.join();
 
   t_r.join();
 
