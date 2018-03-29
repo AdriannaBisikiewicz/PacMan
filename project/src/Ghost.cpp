@@ -56,7 +56,7 @@ void Ghost::moveFromSideToSide(WINDOW *w, int delay)
     while (1)
     {
         mvwprintw(w, prev_y, prev_x, " "); // nieładnie, ale zamiast czyścić cały ekran w poprzednie miejsce duszka wstawiamy pusty znak, przez co się nie krzaczy
-        mvwprintw(w, coordinate_y, x, "o");
+        mvwprintw(w, coordinate_y, x, "G");
         prev_y = coordinate_y;
         prev_x = x;
         usleep(delay);
@@ -83,7 +83,7 @@ void Ghost::Move(WINDOW *w, int delay)
             ChangeDirection();
         }
         mvwprintw(w, prev_y, prev_x, " "); // nieładnie, ale zamiast czyścić cały ekran w poprzednie miejsce duszka wstawiamy pusty znak, przez co się nie krzaczy
-        mvwprintw(w, coordinate_y, coordinate_x, "o");
+        mvwprintw(w, coordinate_y, coordinate_x, "G");
         prev_y = coordinate_y;
         prev_x = coordinate_x;
         usleep(delay);
