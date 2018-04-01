@@ -3,9 +3,11 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h> 
+#include <mutex>
 #include <iostream>
 
 using namespace std;
+std::mutex ghostGuard;
 
 void Ghost::ChangeDirection()
 {
@@ -78,6 +80,7 @@ void Ghost::Move(WINDOW *w, int delay)
     int prev_x = coordinate_x, prev_y = coordinate_y;
     while (1)
     {
+        ghostGuard.lock();
         while(CantGo(w))
         {
             ChangeDirection();
@@ -86,6 +89,7 @@ void Ghost::Move(WINDOW *w, int delay)
         mvwprintw(w, coordinate_y, coordinate_x, "G");
         prev_y = coordinate_y;
         prev_x = coordinate_x;
+        ghostGuard.unlock();
         usleep(delay);
         switch(direction){
             case 1:

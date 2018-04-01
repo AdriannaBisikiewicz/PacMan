@@ -6,17 +6,21 @@
 #include "Ghost.h"
 #include "MapProvider.h"
 #include <time.h> 
+#include <mutex>
 
 using namespace std;
 #define RDELAY 10000
+std::mutex refreshGuard;
 
 // metoda, która w osobnym wątku odświeza nam nasze okno
 void refresh_screen(WINDOW *w)
 {
   while (1)
   {
+    refreshGuard.lock();
     box(w, '|', '-');
     wrefresh(w);
+    refreshGuard.unlock();
     usleep(RDELAY);
   }
 }
