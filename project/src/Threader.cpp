@@ -12,6 +12,8 @@
 using namespace std;
 #define RDELAY 10000
 std::mutex refreshGuard;
+Player player;
+Ghost *ghosts;
 
 // metoda, która w osobnym wątku odświeza nam nasze okno
 void refresh_screen(WINDOW *w)
@@ -41,7 +43,10 @@ void keyboard_input(WINDOW *w)
       // ESC
       if (ch == 27)
       {
-        
+        player.StopPlayer();
+        for (int i=0; i<4; i++){
+          ghosts[i].StopGhost();
+        }
       }
     }
   }
@@ -62,8 +67,13 @@ int main(int argc, char *argv[])
   mvwaddstr(window, 0, 0, "");
   mapProvider->ApplyMap(window);
   wrefresh(window);
-  Ghost ghosts[4] = {Ghost(1, 1), Ghost(1, 29), Ghost(59, 1), Ghost(59, 29)};
-  Player player = Player(30, 7);
+  ghosts = new Ghost[4];
+  ghosts[0] = Ghost(1, 1);
+  ghosts[1] = Ghost(1, 29);
+  ghosts[2] = Ghost(59, 1);
+  ghosts[3] = Ghost(59, 29);
+
+  player = Player(30, 7);
 
   thread t1(&Ghost::Move, &ghosts[0], window, 60000);
   thread t2(&Ghost::Move, &ghosts[1], window, 60000);

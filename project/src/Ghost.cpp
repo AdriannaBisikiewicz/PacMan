@@ -43,12 +43,17 @@ Ghost::Ghost(int x, int y)
     coordinate_y = y;
     distance = 1;
     direction = 2; // 1-left, 3-right, 4-up, 2-down
+    isOn = true;
+}
+
+void Ghost::StopGhost(){
+    isOn = false;
 }
 
 void Ghost::Move(WINDOW *w, int delay)
 {
     int prev_x = coordinate_x, prev_y = coordinate_y;
-    while (1)
+    while (isOn)
     {
         ThreadHelper::Lock();
         while (CantGo(w))

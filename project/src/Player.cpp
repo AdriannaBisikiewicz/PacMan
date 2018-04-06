@@ -44,21 +44,26 @@ Player::Player(int x, int y)
     distance = 1;
     direction = 2; // 1-left, 3-right, 4-up, 2-down
     pacmanMouth = true;
+    isOn = true;
 }
 
 void Player::OpenOrCloseMouth(int delay)
 {
-    while (1)
+    while (isOn)
     {
         usleep(delay);
         pacmanMouth = !pacmanMouth;
     }
 }
 
+void Player::StopPlayer(){
+    isOn = false;
+}
+
 void Player::Move(WINDOW *w, int delay)
 {
     int prev_x = coordinate_x, prev_y = coordinate_y;
-    while (1)
+    while (isOn)
     {
         ThreadHelper::Lock();
         while (CantGo(w))
