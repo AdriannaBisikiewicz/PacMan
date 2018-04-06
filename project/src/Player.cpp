@@ -5,10 +5,9 @@
 #include <mutex>
 #include <time.h> 
 #include <iostream>
+#include "ThreadHelper.h"
 
 using namespace std;
-std::mutex playerGuard;
-
 
 void Player::ChangeDirection()
 {
@@ -50,7 +49,7 @@ void Player::Move(WINDOW *w, int delay)
     int prev_x = coordinate_x, prev_y = coordinate_y;
     while (1)
     {
-        playerGuard.lock();
+        ThreadHelper::Lock();
         while(CantGo(w))
         {
             ChangeDirection();
@@ -59,7 +58,7 @@ void Player::Move(WINDOW *w, int delay)
         mvwprintw(w, coordinate_y, coordinate_x, "O");
         prev_y = coordinate_y;
         prev_x = coordinate_x;
-        playerGuard.unlock();
+        ThreadHelper::Unlock();
         usleep(delay);
         switch(direction){
             case 1:

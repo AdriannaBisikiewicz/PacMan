@@ -2,33 +2,34 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <time.h> 
+#include <time.h>
 #include <mutex>
 #include <iostream>
+#include "ThreadHelper.h"
 
 using namespace std;
-std::mutex ghostGuard;
 
 void Ghost::ChangeDirection()
 {
-    direction = rand() % 4 + 1; 
+    direction = rand() % 4 + 1;
 }
 
 bool Ghost::CantGo(WINDOW *w)
 {
     bool result = true;
-    switch(direction){
-        case 1:
-            result = (mvwinch(w, coordinate_y, coordinate_x-1) == '|' || mvwinch(w, coordinate_y, coordinate_x-1) == '-');
+    switch (direction)
+    {
+    case 1:
+        result = (mvwinch(w, coordinate_y, coordinate_x - 1) == '|' || mvwinch(w, coordinate_y, coordinate_x - 1) == '-');
         break;
-        case 2:
-            result = (mvwinch(w, coordinate_y+1, coordinate_x) == '|' || mvwinch(w,  coordinate_y+1, coordinate_x) == '-');
+    case 2:
+        result = (mvwinch(w, coordinate_y + 1, coordinate_x) == '|' || mvwinch(w, coordinate_y + 1, coordinate_x) == '-');
         break;
-        case 3:
-            result = (mvwinch(w, coordinate_y, coordinate_x+1) == '|' || mvwinch(w, coordinate_y, coordinate_x+1) == '-');
+    case 3:
+        result = (mvwinch(w, coordinate_y, coordinate_x + 1) == '|' || mvwinch(w, coordinate_y, coordinate_x + 1) == '-');
         break;
-        case 4:
-            result = (mvwinch(w, coordinate_y-1, coordinate_x) == '|' || mvwinch(w,  coordinate_y-1, coordinate_x) == '-');
+    case 4:
+        result = (mvwinch(w, coordinate_y - 1, coordinate_x) == '|' || mvwinch(w, coordinate_y - 1, coordinate_x) == '-');
         break;
     }
     return result;
@@ -41,7 +42,7 @@ Ghost::Ghost(int x, int y)
     coordinate_x = x;
     coordinate_y = y;
     distance = 1;
-    direction = 2; // 1-left, 3-right, 4-up, 2-down 
+    direction = 2; // 1-left, 3-right, 4-up, 2-down
 }
 
 void Ghost::Move(WINDOW *w, int delay)
@@ -49,8 +50,8 @@ void Ghost::Move(WINDOW *w, int delay)
     int prev_x = coordinate_x, prev_y = coordinate_y;
     while (1)
     {
-        ghostGuard.lock();
-        while(CantGo(w))
+        ThreadHelper::Lock();
+        while (CantGo(w))
         {
             ChangeDirection();
         }
@@ -58,20 +59,21 @@ void Ghost::Move(WINDOW *w, int delay)
         mvwprintw(w, coordinate_y, coordinate_x, "G");
         prev_y = coordinate_y;
         prev_x = coordinate_x;
-        ghostGuard.unlock();
+        ThreadHelper::Unlock();
         usleep(delay);
-        switch(direction){
-            case 1:
-                coordinate_x--;
+        switch (direction)
+        {
+        case 1:
+            coordinate_x--;
             break;
-            case 2:
-                coordinate_y++;
+        case 2:
+            coordinate_y++;
             break;
-            case 3:
-                coordinate_x++;
+        case 3:
+            coordinate_x++;
             break;
-            case 4:
-                coordinate_y--;
+        case 4:
+            coordinate_y--;
             break;
         }
     }

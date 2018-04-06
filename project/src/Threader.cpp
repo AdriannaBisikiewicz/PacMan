@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
   thread t3(&Ghost::Move, &ghosts[2], window, 60000);
   thread t4(&Ghost::Move, &ghosts[3], window, 60000);
 
-  // thread t5(&Player::Move, &player, window, 60000);
+  thread t5(&Player::Move, &player, window, 60000);
   // przerysowywanie ekranu
   thread t_r(refresh_screen, window);
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
   t2.join();
   t3.join();
   t4.join();
-  // t5.join();
+  t5.join();
   t_r.join();
 
   endwin();
