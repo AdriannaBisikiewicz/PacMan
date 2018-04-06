@@ -68,10 +68,10 @@ int main(int argc, char *argv[])
   mapProvider->ApplyMap(window);
   wrefresh(window);
   ghosts = new Ghost[4];
-  ghosts[0] = Ghost(1, 1);
-  ghosts[1] = Ghost(1, 29);
-  ghosts[2] = Ghost(59, 1);
-  ghosts[3] = Ghost(59, 29);
+  ghosts[0] = Ghost(17, 12);
+  ghosts[1] = Ghost(17, 14);
+  ghosts[2] = Ghost(44, 12);
+  ghosts[3] = Ghost(44, 14);
 
   player = Player(30, 7);
 
