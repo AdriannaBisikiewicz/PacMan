@@ -1,20 +1,21 @@
-#include "Ghost.h"
+#include "Player.h"
 #include <ncurses.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <time.h> 
 #include <mutex>
+#include <time.h> 
 #include <iostream>
 
 using namespace std;
-std::mutex ghostGuard;
+std::mutex playerGuard;
 
-void Ghost::ChangeDirection()
+
+void Player::ChangeDirection()
 {
     direction = rand() % 4 + 1; 
 }
 
-bool Ghost::CantGo(WINDOW *w)
+bool Player::CantGo(WINDOW *w)
 {
     bool result = true;
     switch(direction){
@@ -34,9 +35,9 @@ bool Ghost::CantGo(WINDOW *w)
     return result;
 }
 
-Ghost::Ghost() {}
+Player::Player() {}
 
-Ghost::Ghost(int x, int y)
+Player::Player(int x, int y)
 {
     coordinate_x = x;
     coordinate_y = y;
@@ -44,21 +45,21 @@ Ghost::Ghost(int x, int y)
     direction = 2; // 1-left, 3-right, 4-up, 2-down 
 }
 
-void Ghost::Move(WINDOW *w, int delay)
+void Player::Move(WINDOW *w, int delay)
 {
     int prev_x = coordinate_x, prev_y = coordinate_y;
     while (1)
     {
-        ghostGuard.lock();
+        playerGuard.lock();
         while(CantGo(w))
         {
             ChangeDirection();
         }
         mvwprintw(w, prev_y, prev_x, " "); // nieładnie, ale zamiast czyścić cały ekran w poprzednie miejsce duszka wstawiamy pusty znak, przez co się nie krzaczy
-        mvwprintw(w, coordinate_y, coordinate_x, "G");
+        mvwprintw(w, coordinate_y, coordinate_x, "O");
         prev_y = coordinate_y;
         prev_x = coordinate_x;
-        ghostGuard.unlock();
+        playerGuard.unlock();
         usleep(delay);
         switch(direction){
             case 1:

@@ -1,5 +1,5 @@
 #include <ncurses.h>
-class Ghost
+class Player
 {
     int coordinate_x;
     int coordinate_y;
@@ -7,8 +7,9 @@ class Ghost
     int direction;
     void ChangeDirection();
     bool CantGo(WINDOW *w);
-  public :
-    Ghost();
-    Ghost(int x, int y);
+
+  public:
+    Player();
+    Player(int x, int y);
     void Move(WINDOW *w, int delay);
 };
