@@ -6,7 +6,7 @@
 #include "Ghost.h"
 #include "Player.h"
 #include "MapProvider.h"
-#include <time.h> 
+#include <time.h>
 #include <mutex>
 
 using namespace std;
@@ -26,9 +26,30 @@ void refresh_screen(WINDOW *w)
   }
 }
 
+void keyboard_input(WINDOW *w)
+{
+  cbreak(); // each key the user hits is returned immediately by getch()
+
+  int ch;
+  nodelay(stdscr, TRUE);
+  for (;;)
+  {
+    if ((ch = getch()) == ERR){}
+    // uzytkownik wciska klawisz
+    else
+    {
+      // ESC
+      if (ch == 27)
+      {
+        
+      }
+    }
+  }
+}
+
 int main(int argc, char *argv[])
 {
-  srand (time(NULL));
+  srand(time(NULL));
   WINDOW *window; // potrzebujemy go, aby móx zrobić obramowanie
   MapProvider *mapProvider = new MapProvider();
   int maxx, maxy;
@@ -36,13 +57,13 @@ int main(int argc, char *argv[])
   noecho();
   curs_set(FALSE);
 
-  window = newwin(mapProvider->GetHeight()+2, mapProvider->GetWidth()+2, 0, 0);
+  window = newwin(mapProvider->GetHeight() + 2, mapProvider->GetWidth() + 2, 0, 0);
   box(window, '|', '-'); // metoda tworząca obramowanie
   mvwaddstr(window, 0, 0, "");
   mapProvider->ApplyMap(window);
   wrefresh(window);
   Ghost ghosts[4] = {Ghost(1, 1), Ghost(1, 29), Ghost(59, 1), Ghost(59, 29)};
-  Player player = Player(30,9);
+  Player player = Player(30, 7);
 
   thread t1(&Ghost::Move, &ghosts[0], window, 60000);
   thread t2(&Ghost::Move, &ghosts[1], window, 60000);
@@ -53,6 +74,8 @@ int main(int argc, char *argv[])
   thread t6(&Player::OpenOrCloseMouth, &player, 600000);
   // przerysowywanie ekranu
   thread t_r(refresh_screen, window);
+  // keyboard
+  thread t_k(keyboard_input, window);
 
   t1.join();
   t2.join();
@@ -61,6 +84,7 @@ int main(int argc, char *argv[])
   t5.join();
   t6.join();
   t_r.join();
+  t_k.join();
 
   endwin();
 }
