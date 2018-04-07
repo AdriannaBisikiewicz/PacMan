@@ -3,27 +3,28 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "ThreadHelper.h"
 #include "Ghost.h"
 #include "Player.h"
 #include "MapProvider.h"
+#include "InformationProvider.h"
 #include <time.h>
 #include <mutex>
 
 using namespace std;
 #define RDELAY 10000
-std::mutex refreshGuard;
 Player player;
 Ghost *ghosts;
 
 // metoda, która w osobnym wątku odświeza nam nasze okno
-void refresh_screen(WINDOW *w)
+void refresh_screen(WINDOW *mw, WINDOW *iw)
 {
   while (1)
   {
-    refreshGuard.lock();
-    box(w, '|', '-');
-    wrefresh(w);
-    refreshGuard.unlock();
+    ThreadHelper::Lock();
+    wrefresh(mw);
+    wrefresh(iw);
+    ThreadHelper::Unlock();
     usleep(RDELAY);
   }
 }
@@ -55,18 +56,21 @@ void keyboard_input(WINDOW *w)
 int main(int argc, char *argv[])
 {
   srand(time(NULL));
-  WINDOW *window; // potrzebujemy go, aby móx zrobić obramowanie
+  WINDOW *main_window;
+  WINDOW *information_window;
   MapProvider *mapProvider = new MapProvider();
-  int maxx, maxy;
+  InformationProvider *informationProvider = new InformationProvider();
   initscr();
   noecho();
   curs_set(FALSE);
+  refresh(); // Need this to let other windows be drawn
 
-  window = newwin(mapProvider->GetHeight() + 2, mapProvider->GetWidth() + 2, 0, 0);
-  box(window, '|', '-'); // metoda tworząca obramowanie
-  mvwaddstr(window, 0, 0, "");
-  mapProvider->ApplyMap(window);
-  wrefresh(window);
+  main_window = newwin(mapProvider->GetHeight() + 2, mapProvider->GetWidth() + 2, 0, 0);
+  information_window = newwin(informationProvider->GetHeight() + 2,informationProvider->GetWidth() + 2, 0, mapProvider->GetWidth()+1);
+
+  mapProvider->ApplyMap(main_window);
+  informationProvider->ApplyInformation(information_window);  refresh();
+
   ghosts = new Ghost[4];
   ghosts[0] = Ghost(17, 12);
   ghosts[1] = Ghost(17, 14);
@@ -75,17 +79,19 @@ int main(int argc, char *argv[])
 
   player = Player(30, 7);
 
-  thread t1(&Ghost::Move, &ghosts[0], window, 60000);
-  thread t2(&Ghost::Move, &ghosts[1], window, 60000);
-  thread t3(&Ghost::Move, &ghosts[2], window, 60000);
-  thread t4(&Ghost::Move, &ghosts[3], window, 60000);
-
-  thread t5(&Player::Move, &player, window, 60000);
+  thread t1(&Ghost::Move, &ghosts[0], main_window, 60000);
+  thread t2(&Ghost::Move, &ghosts[1], main_window, 60000);
+  thread t3(&Ghost::Move, &ghosts[2], main_window, 60000);
+  thread t4(&Ghost::Move, &ghosts[3], main_window, 60000);
+  //Player threads
+  thread t5(&Player::Move, &player, main_window, 60000);
   thread t6(&Player::OpenOrCloseMouth, &player, 600000);
   // przerysowywanie ekranu
-  thread t_r(refresh_screen, window);
+  thread t_r(refresh_screen, main_window, information_window);
   // keyboard
-  thread t_k(keyboard_input, window);
+  thread t_k(keyboard_input, main_window);
+
+  //mvwprintw(information_window, 10, 13, "1"); Miejsce, w którym jest liczba jedności naszego score
 
   t1.join();
   t2.join();

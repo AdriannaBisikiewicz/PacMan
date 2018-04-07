@@ -1,4 +1,4 @@
-#include "MapProvider.h"
+#include "InformationProvider.h"
 #include <ncurses.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -7,20 +7,20 @@
 
 using namespace std;
 
-MapProvider::MapProvider()
+InformationProvider::InformationProvider()
 {
-    width = 60;
+    width = 14;
     height = 30;
 }
 
-void MapProvider::ApplyMap(WINDOW *w)
+void InformationProvider::ApplyInformation(WINDOW *w)
 {
-    char map[height][width+1];
+    char information[height][width+1];
     ifstream stream;
-    stream.open("map.txt");
+    stream.open("information.txt");
     for(int y=0;y<height;y++){
         for(int x=0; x<width+1; x++){
-            stream.get(map[y][x]);
+            stream.get(information[y][x]);
         }
     }
     stream.close();
@@ -33,19 +33,19 @@ void MapProvider::ApplyMap(WINDOW *w)
     {
         for(int y = 0;y<height;y++)
         {
-            mvwaddch(w, y+1, x+1, map[y][x]);
+            mvwaddch(w, y+1, x+1, information[y][x]);
         }
     }
     wrefresh(w);
 }
 
-int MapProvider::GetHeight()
+int InformationProvider::GetHeight()
 {
     return height;
 }
 
 
-int MapProvider::GetWidth()
+int InformationProvider::GetWidth()
 {
     return width;
 }

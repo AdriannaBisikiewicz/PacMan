@@ -1,0 +1,30 @@
+              
+    Pac-Man   
+   Movement   
+   w - Up     
+   a - Left   
+   s - Down   
+   d - Rignt  
+   ESC - Exit 
+              
+   Score:   0 
+              
+   Made by:   
+   Adrianna   
+  Bisikiewicz 
+     And      
+   Krystian   
+    Kolad     
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
