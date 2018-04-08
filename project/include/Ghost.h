@@ -12,6 +12,6 @@ class Ghost
 public:
   Ghost();
   Ghost(int x, int y);
-  void Move(WINDOW *w, int delay);
+  void Move(WINDOW *w, int delay, int colour);
   void StopGhost();
 };

@@ -7,7 +7,7 @@
    d - Rignt  
    ESC - Exit 
               
-   Score:   0 
+   Score: 0   
               
    Made by:   
    Adrianna   

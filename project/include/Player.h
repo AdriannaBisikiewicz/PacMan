@@ -9,6 +9,7 @@ class Player
   bool isOn;
   void ChangeDirection();
   bool CantGo(WINDOW *w);
+  int score;
 
 public:
   Player();
@@ -16,4 +17,5 @@ public:
   void Move(WINDOW *w, int delay);
   void OpenOrCloseMouth(int delay);
   void StopPlayer();
+  void WritePoints(WINDOW *iw);
 };

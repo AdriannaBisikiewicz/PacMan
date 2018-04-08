@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <mutex>
+#include <condition_variable>
 #include <time.h>
 #include <iostream>
 #include "ThreadHelper.h"
@@ -16,23 +17,23 @@ void Player::ChangeDirection()
 
 bool Player::CantGo(WINDOW *w)
 {
-    bool result = true;
+    int color;
     switch (direction)
     {
     case 1:
-        result = (mvwinch(w, coordinate_y, coordinate_x - 1) == '|' || mvwinch(w, coordinate_y, coordinate_x - 1) == '-');
+        color = (mvwinch(w, coordinate_y, coordinate_x - 1) & A_COLOR);
         break;
     case 2:
-        result = (mvwinch(w, coordinate_y + 1, coordinate_x) == '|' || mvwinch(w, coordinate_y + 1, coordinate_x) == '-');
+        color = (mvwinch(w, coordinate_y + 1, coordinate_x) & A_COLOR);
         break;
     case 3:
-        result = (mvwinch(w, coordinate_y, coordinate_x + 1) == '|' || mvwinch(w, coordinate_y, coordinate_x + 1) == '-');
+        color = (mvwinch(w, coordinate_y, coordinate_x + 1) & A_COLOR);
         break;
     case 4:
-        result = (mvwinch(w, coordinate_y - 1, coordinate_x) == '|' || mvwinch(w, coordinate_y - 1, coordinate_x) == '-');
+        color = (mvwinch(w, coordinate_y - 1, coordinate_x) & A_COLOR);
         break;
     }
-    return result;
+    return color == COLOR_PAIR(6);;
 }
 
 Player::Player() {}
@@ -45,6 +46,7 @@ Player::Player(int x, int y)
     direction = 2; // 1-left, 3-right, 4-up, 2-down
     pacmanMouth = true;
     isOn = true;
+    score = 0;
 }
 
 void Player::OpenOrCloseMouth(int delay)
@@ -60,6 +62,16 @@ void Player::StopPlayer(){
     isOn = false;
 }
 
+void Player::WritePoints(WINDOW *iw)
+{
+    while(isOn)
+    {
+        ThreadHelper::Wait();
+        score++;
+        mvwprintw(iw, 10, 11, std::to_string(score).c_str());
+    }
+}
+
 void Player::Move(WINDOW *w, int delay)
 {
     int prev_x = coordinate_x, prev_y = coordinate_y;
@@ -70,7 +82,12 @@ void Player::Move(WINDOW *w, int delay)
         {
             ChangeDirection();
         }
-        mvwprintw(w, prev_y, prev_x, " "); // nieładnie, ale zamiast czyścić cały ekran w poprzednie miejsce duszka wstawiamy pusty znak, przez co się nie krzaczy
+        mvwprintw(w, prev_y, prev_x, " ");
+        if(mvwinch(w, coordinate_y, coordinate_x) == '*')
+        {
+            ThreadHelper::Notify();
+        }
+        wattron(w,COLOR_PAIR(5));
         if (pacmanMouth)
         {
             mvwprintw(w, coordinate_y, coordinate_x, "O");
@@ -79,6 +96,7 @@ void Player::Move(WINDOW *w, int delay)
         {
             mvwprintw(w, coordinate_y, coordinate_x, "C");
         }
+        wattroff(w,COLOR_PAIR(5));
         prev_y = coordinate_y;
         prev_x = coordinate_x;
         ThreadHelper::Unlock();

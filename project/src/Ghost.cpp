@@ -16,23 +16,23 @@ void Ghost::ChangeDirection()
 
 bool Ghost::CantGo(WINDOW *w)
 {
-    bool result = true;
+    int color;
     switch (direction)
     {
     case 1:
-        result = (mvwinch(w, coordinate_y, coordinate_x - 1) == '|' || mvwinch(w, coordinate_y, coordinate_x - 1) == '-');
+        color = (mvwinch(w, coordinate_y, coordinate_x - 1) & A_COLOR);
         break;
     case 2:
-        result = (mvwinch(w, coordinate_y + 1, coordinate_x) == '|' || mvwinch(w, coordinate_y + 1, coordinate_x) == '-');
+        color = (mvwinch(w, coordinate_y + 1, coordinate_x) & A_COLOR);
         break;
     case 3:
-        result = (mvwinch(w, coordinate_y, coordinate_x + 1) == '|' || mvwinch(w, coordinate_y, coordinate_x + 1) == '-');
+        color = (mvwinch(w, coordinate_y, coordinate_x + 1) & A_COLOR);
         break;
     case 4:
-        result = (mvwinch(w, coordinate_y - 1, coordinate_x) == '|' || mvwinch(w, coordinate_y - 1, coordinate_x) == '-');
+        color = (mvwinch(w, coordinate_y - 1, coordinate_x) & A_COLOR);
         break;
     }
-    return result;
+    return color == COLOR_PAIR(6);;
 }
 
 Ghost::Ghost() {}
@@ -50,8 +50,9 @@ void Ghost::StopGhost(){
     isOn = false;
 }
 
-void Ghost::Move(WINDOW *w, int delay)
+void Ghost::Move(WINDOW *w, int delay, int colour)
 {
+    bool wasPoint = false;
     int prev_x = coordinate_x, prev_y = coordinate_y;
     while (isOn)
     {
@@ -60,8 +61,18 @@ void Ghost::Move(WINDOW *w, int delay)
         {
             ChangeDirection();
         }
-        mvwprintw(w, prev_y, prev_x, " "); // nieładnie, ale zamiast czyścić cały ekran w poprzednie miejsce duszka wstawiamy pusty znak, przez co się nie krzaczy
+        if(wasPoint)
+        {
+            mvwprintw(w, prev_y, prev_x, "*");
+        }
+        else
+        {
+            mvwprintw(w, prev_y, prev_x, " "); // nieładnie, ale zamiast czyścić cały ekran w poprzednie miejsce duszka wstawiamy pusty znak, przez co się nie krzaczy
+        }
+        wasPoint = (mvwinch(w, coordinate_y, coordinate_x) == '*');
+        wattron(w,COLOR_PAIR(colour));
         mvwprintw(w, coordinate_y, coordinate_x, "G");
+        wattroff(w,COLOR_PAIR(colour));
         prev_y = coordinate_y;
         prev_x = coordinate_x;
         ThreadHelper::Unlock();

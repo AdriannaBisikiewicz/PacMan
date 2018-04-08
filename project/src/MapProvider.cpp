@@ -24,8 +24,9 @@ void MapProvider::ApplyMap(WINDOW *w)
         }
     }
     stream.close();
-
+    wattron(w,COLOR_PAIR(6));
     box(w, '|', '-'); // metoda tworząca obramowanie
+    wattroff(w,COLOR_PAIR(6));
     mvwaddstr(w, 0, 0, "");
     wrefresh(w);
 
@@ -33,7 +34,16 @@ void MapProvider::ApplyMap(WINDOW *w)
     {
         for(int y = 0;y<height;y++)
         {
-            mvwaddch(w, y+1, x+1, map[y][x]);
+            if(map[y][x] == '|' || map[y][x] == '-' || map[y][x] == '#')
+            {
+                wattron(w,COLOR_PAIR(6));
+                mvwaddch(w, y+1, x+1, map[y][x]);
+                wattroff(w,COLOR_PAIR(6));
+            }
+            else
+            {
+                mvwaddch(w, y+1, x+1, map[y][x]);
+            }
         }
     }
     wrefresh(w);
