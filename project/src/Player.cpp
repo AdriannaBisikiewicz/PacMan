@@ -77,13 +77,13 @@ void Player::StopPlayer()
     isOn = false;
 }
 
-void Player::WritePoints(WINDOW *iw)
+void Player::WritePoints(WINDOW *w)
 {
     while (isOn)
     {
         ThreadHelper::Wait();
         score++;
-        mvwprintw(iw, 10, 11, std::to_string(score).c_str());
+        mvwprintw(w, 10, 11, std::to_string(score).c_str());
     }
 }
 
@@ -92,6 +92,7 @@ void Player::Move(WINDOW *w, int delay)
     int prev_x = coordinate_x, prev_y = coordinate_y;
     while (isOn)
     {
+        ThreadHelper::Lock();
         if (CanGo(w))
         {
             distance = 1;
@@ -115,7 +116,6 @@ void Player::Move(WINDOW *w, int delay)
             break;
         }
 
-        ThreadHelper::Lock();
         mvwprintw(w, prev_y, prev_x, " ");
         if (mvwinch(w, coordinate_y, coordinate_x) == '*')
         {

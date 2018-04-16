@@ -12,7 +12,7 @@
 #include <mutex>
 
 using namespace std;
-#define RDELAY 10000
+#define RDELAY 100000
 Player player;
 Ghost *ghosts;
 WINDOW *main_window;
