@@ -8,7 +8,7 @@ class Player
   bool pacmanMouth;
   bool isOn;
   void ChangeDirection();
-  bool CantGo(WINDOW *w);
+  bool CanGo(WINDOW *w);
   int score;
 
 public:
@@ -18,5 +18,4 @@ public:
   void OpenOrCloseMouth(int delay);
   void StopPlayer();
   void WritePoints(WINDOW *iw);
-  void MoveByUser(int key);
 };

@@ -57,7 +57,7 @@ void keyboard_input(WINDOW *w)
       // Left arrow
       if (ch == 37)
       {
-          player.MoveByUser(37);
+       
       }
       // Up arrow
       if (ch == 38)
