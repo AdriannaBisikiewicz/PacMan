@@ -7,7 +7,6 @@ class Player
   int direction;
   bool pacmanMouth;
   bool isOn;
-  void ChangeDirection();
   bool CanGo(WINDOW *w);
   int score;
 
@@ -18,4 +17,5 @@ public:
   void OpenOrCloseMouth(int delay);
   void StopPlayer();
   void WritePoints(WINDOW *iw);
+  void ChangeDirection(int);
 };

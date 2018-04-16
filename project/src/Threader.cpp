@@ -45,8 +45,8 @@ void keyboard_input(WINDOW *w)
     // uzytkownik wciska klawisz
     else
     {
-      // ESC
-      if (ch == 27)
+      // h - EXIT
+      if (ch == 104)
       {
         player.StopPlayer();
         for (int i = 0; i < 4; i++)
@@ -54,22 +54,25 @@ void keyboard_input(WINDOW *w)
           ghosts[i].StopGhost();
         }
       }
-      // Left arrow
-      if (ch == 37)
+      // Left
+      if (ch == 97)
       {
-       
+        player.ChangeDirection(1);
       }
-      // Up arrow
-      if (ch == 38)
+      // Up 
+      if (ch == 119)
       {
+        player.ChangeDirection(4);
       }
-      // Right arrow
-      if (ch == 39)
+      // Right
+      if (ch == 100)
       {
+        player.ChangeDirection(3);
       }
-      // Down arrow
-      if (ch == 40)
+      // Down 
+      if (ch == 115)
       {
+        player.ChangeDirection(2);
       }
     }
   }

@@ -10,9 +10,23 @@
 
 using namespace std;
 
-void Player::ChangeDirection()
+void Player::ChangeDirection(int key)
 {
-    direction = rand() % 4 + 1;
+    switch(key)
+    {
+    case 1:
+        direction = 1;
+        break;
+    case 2:
+        direction = 2;
+        break;
+    case 3:
+        direction = 3;
+        break;
+    case 4:
+        direction = 4;
+        break;
+    }
 }
 
 bool Player::CanGo(WINDOW *w)
@@ -43,7 +57,7 @@ Player::Player(int x, int y)
     coordinate_x = x;
     coordinate_y = y;
     distance = 1;
-    direction = 3; // 1-left, 3-right, 4-up, 2-down
+    direction = 4; // 1-left, 3-right, 4-up, 2-down
     pacmanMouth = true;
     isOn = true;
     score = 0;
@@ -105,11 +119,11 @@ void Player::Move(WINDOW *w, int delay)
         wattron(w, COLOR_PAIR(5));
         if (pacmanMouth)
         {
-            mvwprintw(w, coordinate_y, coordinate_x, "O");
+            mvwaddch(w, coordinate_y, coordinate_x, 'O');
         }
         else
         {
-            mvwprintw(w, coordinate_y, coordinate_x, "C");
+            mvwaddch(w, coordinate_y, coordinate_x, 'C');
         }
         wattroff(w, COLOR_PAIR(5));
         prev_y = coordinate_y;
