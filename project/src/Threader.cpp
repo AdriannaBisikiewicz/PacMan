@@ -39,7 +39,9 @@ void keyboard_input(WINDOW *w)
   nodelay(stdscr, TRUE);
   for (;;)
   {
-    if ((ch = getch()) == ERR){}
+    if ((ch = getch()) == ERR)
+    {
+    }
     // uzytkownik wciska klawisz
     else
     {
@@ -47,9 +49,27 @@ void keyboard_input(WINDOW *w)
       if (ch == 27)
       {
         player.StopPlayer();
-        for (int i=0; i<4; i++){
+        for (int i = 0; i < 4; i++)
+        {
           ghosts[i].StopGhost();
         }
+      }
+      // Left arrow
+      if (ch == 37)
+      {
+          player.MoveByUser(37);
+      }
+      // Up arrow
+      if (ch == 38)
+      {
+      }
+      // Right arrow
+      if (ch == 39)
+      {
+      }
+      // Down arrow
+      if (ch == 40)
+      {
       }
     }
   }
@@ -81,10 +101,10 @@ void initialize_windows()
   InformationProvider *informationProvider = new InformationProvider();
 
   main_window = newwin(mapProvider->GetHeight() + 2, mapProvider->GetWidth() + 2, 0, 0);
-  information_window = newwin(informationProvider->GetHeight() + 2,informationProvider->GetWidth() + 2, 0, mapProvider->GetWidth()+2);
+  information_window = newwin(informationProvider->GetHeight() + 2, informationProvider->GetWidth() + 2, 0, mapProvider->GetWidth() + 2);
 
   mapProvider->ApplyMap(main_window);
-  informationProvider->ApplyInformation(information_window);  
+  informationProvider->ApplyInformation(information_window);
 }
 
 void create_threads()
