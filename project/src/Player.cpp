@@ -12,7 +12,7 @@ using namespace std;
 
 void Player::ChangeDirection(int key)
 {
-    switch(key)
+    switch (key)
     {
     case 1:
         direction = 1;
@@ -56,7 +56,7 @@ Player::Player(int x, int y)
 {
     coordinate_x = x;
     coordinate_y = y;
-    distance = 1;
+    distance = 0;
     direction = 4; // 1-left, 3-right, 4-up, 2-down
     pacmanMouth = true;
     isOn = true;
@@ -94,22 +94,27 @@ void Player::Move(WINDOW *w, int delay)
     {
         if (CanGo(w))
         {
-            switch (direction)
-            {
-            case 1:
-                coordinate_x--;
-                break;
-            case 2:
-                coordinate_y++;
-                break;
-            case 3:
-                coordinate_x++;
-                break;
-            case 4:
-                coordinate_y--;
-                break;
-            }
+            distance = 1;
         }
+        else distance = 0;
+
+        switch (direction)
+        {
+
+        case 1:
+            coordinate_x -= distance;
+            break;
+        case 2:
+            coordinate_y += distance;
+            break;
+        case 3:
+            coordinate_x += distance;
+            break;
+        case 4:
+            coordinate_y -= distance;
+            break;
+        }
+
         ThreadHelper::Lock();
         mvwprintw(w, prev_y, prev_x, " ");
         if (mvwinch(w, coordinate_y, coordinate_x) == '*')

@@ -5,7 +5,7 @@
    a - Left   
    s - Down   
    d - Rignt  
-   ESC - h 
+   h - EXIT   
               
    Score: 0   
               
