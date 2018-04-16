@@ -42,7 +42,7 @@ void keyboard_input(WINDOW *w)
     if ((ch = getch()) == ERR)
     {
     }
-    // uzytkownik wciska klawisz
+    // user pushes or holds a key
     else
     {
       // h - EXIT
@@ -53,13 +53,17 @@ void keyboard_input(WINDOW *w)
         {
           ghosts[i].StopGhost();
         }
+
+        usleep(1000000);
+        endwin();
+        exit(0);
       }
       // Left
       if (ch == 97)
       {
         player.ChangeDirection(1);
       }
-      // Up 
+      // Up
       if (ch == 119)
       {
         player.ChangeDirection(4);
@@ -69,7 +73,7 @@ void keyboard_input(WINDOW *w)
       {
         player.ChangeDirection(3);
       }
-      // Down 
+      // Down
       if (ch == 115)
       {
         player.ChangeDirection(2);
