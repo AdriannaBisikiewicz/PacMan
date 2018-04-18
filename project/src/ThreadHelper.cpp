@@ -7,6 +7,7 @@
 using namespace std;
 std::mutex ThreadHelper::threadGuard;
 std::condition_variable ThreadHelper::scoreCondition;
+std::condition_variable ThreadHelper::deathCondition;
 bool foundPoint = false;
 bool isDeath = false;
 
@@ -36,7 +37,7 @@ void ThreadHelper::Notify()
 void ThreadHelper::WaitForPacmanDeath()
 {
     std::unique_lock<std::mutex> deathPacmanLock(threadGuard);
-    isDeath = true;
+    isDeath = false;
     deathCondition.wait(deathPacmanLock, []{ return isDeath; });
 }
 

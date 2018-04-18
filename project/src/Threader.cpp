@@ -62,7 +62,7 @@ void keyboard_input(WINDOW *w)
       // h - EXIT
       if (ch == 104)
       {
-        gameOver();
+        ThreadHelper::KillPacman();
       }
       // Left
       if (ch == 97)
