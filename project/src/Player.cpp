@@ -10,29 +10,23 @@
 
 using namespace std;
 
-void Player::ChangeDirection(int key)
+void Player::ChangeDirection(WINDOW *w,int key)
 {
-    switch (key)
+    if(CanGo(w, key))
     {
-    case 1:
-        direction = 1;
-        break;
-    case 2:
-        direction = 2;
-        break;
-    case 3:
-        direction = 3;
-        break;
-    case 4:
-        direction = 4;
-        break;
+        direction = key;
+        n_direction = direction;
+    }
+    else
+    {
+        n_direction = key;
     }
 }
 
-bool Player::CanGo(WINDOW *w)
+bool Player::CanGo(WINDOW *w, int dir)
 {
     int color;
-    switch (direction)
+    switch (dir)
     {
     case 1:
         color = (mvwinch(w, coordinate_y, coordinate_x - 1) & A_COLOR);
@@ -58,6 +52,7 @@ Player::Player(int x, int y)
     coordinate_y = y;
     distance = 0;
     direction = 4; // 1-left, 3-right, 4-up, 2-down
+    n_direction = direction;
     pacmanMouth = true;
     isOn = true;
     score = 0;
@@ -93,7 +88,11 @@ void Player::Move(WINDOW *w, int delay)
     while (isOn)
     {
         ThreadHelper::Lock();
-        if (CanGo(w))
+        if(direction != n_direction && CanGo(w,n_direction))
+        {
+            direction = n_direction;
+        }
+        if (CanGo(w, direction))
         {
             distance = 1;
         }

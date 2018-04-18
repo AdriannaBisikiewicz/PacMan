@@ -5,9 +5,10 @@ class Player
   int coordinate_y;
   int distance;
   int direction;
+  int n_direction;
   bool pacmanMouth;
   bool isOn;
-  bool CanGo(WINDOW *w);
+  bool CanGo(WINDOW *w, int dir);
   int score;
 
 public:
@@ -17,5 +18,5 @@ public:
   void OpenOrCloseMouth(int delay);
   void StopPlayer();
   void WritePoints(WINDOW *iw);
-  void ChangeDirection(int);
+  void ChangeDirection(WINDOW *w,int key);
 };

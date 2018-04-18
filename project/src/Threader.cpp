@@ -67,22 +67,22 @@ void keyboard_input(WINDOW *w)
       // Left
       if (ch == 97)
       {
-        player.ChangeDirection(1);
+        player.ChangeDirection(main_window,1);
       }
       // Up
       if (ch == 119)
       {
-        player.ChangeDirection(4);
+        player.ChangeDirection(main_window,4);
       }
       // Right
       if (ch == 100)
       {
-        player.ChangeDirection(3);
+        player.ChangeDirection(main_window,3);
       }
       // Down
       if (ch == 115)
       {
-        player.ChangeDirection(2);
+        player.ChangeDirection(main_window,2);
       }
     }
   }
