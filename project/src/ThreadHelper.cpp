@@ -36,7 +36,7 @@ void ThreadHelper::Notify()
 void ThreadHelper::WaitForPacmanDeath()
 {
     std::unique_lock<std::mutex> deathPacmanLock(threadGuard);
-    isDeath = false;
+    isDeath = true;
     deathCondition.wait(deathPacmanLock, []{ return isDeath; });
 }
 

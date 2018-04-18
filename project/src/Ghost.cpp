@@ -61,7 +61,7 @@ void Ghost::Move(WINDOW *w, int delay, int colour)
         ThreadHelper::Lock();
         if (mvwinch(w, coordinate_y, coordinate_x & A_COLOR) == COLOR_PAIR(5))
         {
-            ThreadHelper::WaitForPacmanDeath();
+            ThreadHelper::KillPacman();
         }
 
         while (CantGo(w))
