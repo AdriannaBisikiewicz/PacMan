@@ -8,6 +8,7 @@ using namespace std;
 std::mutex ThreadHelper::threadGuard;
 std::condition_variable ThreadHelper::scoreCondition;
 bool foundPoint = false;
+bool isDeath = false;
 
 void ThreadHelper::Lock()
 {
@@ -30,4 +31,17 @@ void ThreadHelper::Notify()
 {
     foundPoint = true;
     scoreCondition.notify_one();
+}
+
+void ThreadHelper::WaitForPacmanDeath()
+{
+    std::unique_lock<std::mutex> deathPacmanLock(threadGuard);
+    isDeath = false;
+    deathCondition.wait(deathPacmanLock, []{ return isDeath; });
+}
+
+void ThreadHelper::KillPacman()
+{
+    isDeath = true;
+    deathCondition.notify_one();
 }

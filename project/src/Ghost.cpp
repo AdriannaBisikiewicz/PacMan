@@ -32,7 +32,7 @@ bool Ghost::CantGo(WINDOW *w)
         color = (mvwinch(w, coordinate_y - 1, coordinate_x) & A_COLOR);
         break;
     }
-    return color == COLOR_PAIR(6);;
+    return color == COLOR_PAIR(6);
 }
 
 Ghost::Ghost() {}
@@ -46,7 +46,8 @@ Ghost::Ghost(int x, int y)
     isOn = true;
 }
 
-void Ghost::StopGhost(){
+void Ghost::StopGhost()
+{
     isOn = false;
 }
 
@@ -56,12 +57,18 @@ void Ghost::Move(WINDOW *w, int delay, int colour)
     int prev_x = coordinate_x, prev_y = coordinate_y;
     while (isOn)
     {
+
         ThreadHelper::Lock();
+        if (mvwinch(w, coordinate_y, coordinate_x & A_COLOR) == COLOR_PAIR(5))
+        {
+            ThreadHelper::WaitForPacmanDeath();
+        }
+
         while (CantGo(w))
         {
             ChangeDirection();
         }
-        if(wasPoint)
+        if (wasPoint)
         {
             mvwprintw(w, prev_y, prev_x, "*");
         }
@@ -70,13 +77,15 @@ void Ghost::Move(WINDOW *w, int delay, int colour)
             mvwprintw(w, prev_y, prev_x, " "); // nieładnie, ale zamiast czyścić cały ekran w poprzednie miejsce duszka wstawiamy pusty znak, przez co się nie krzaczy
         }
         wasPoint = (mvwinch(w, coordinate_y, coordinate_x) == '*');
-        wattron(w,COLOR_PAIR(colour));
+        wattron(w, COLOR_PAIR(colour));
         mvwprintw(w, coordinate_y, coordinate_x, "G");
-        wattroff(w,COLOR_PAIR(colour));
+        wattroff(w, COLOR_PAIR(colour));
+
         prev_y = coordinate_y;
         prev_x = coordinate_x;
         ThreadHelper::Unlock();
         usleep(delay);
+
         switch (direction)
         {
         case 1:

@@ -31,6 +31,20 @@ void refresh_screen(WINDOW *mw, WINDOW *iw)
   }
 }
 
+void gameOver()
+{
+  ThreadHelper::WaitForPacmanDeath();
+  player.StopPlayer();
+  for (int i = 0; i < 4; i++)
+  {
+    ghosts[i].StopGhost();
+  }
+
+  usleep(1000000);
+  endwin();
+  exit(0);
+}
+
 void keyboard_input(WINDOW *w)
 {
   cbreak(); // each key the user hits is returned immediately by getch()
@@ -48,15 +62,7 @@ void keyboard_input(WINDOW *w)
       // h - EXIT
       if (ch == 104)
       {
-        player.StopPlayer();
-        for (int i = 0; i < 4; i++)
-        {
-          ghosts[i].StopGhost();
-        }
-
-        usleep(1000000);
-        endwin();
-        exit(0);
+        gameOver();
       }
       // Left
       if (ch == 97)
@@ -128,6 +134,8 @@ void create_threads()
   thread t_r(refresh_screen, main_window, information_window);
   // keyboard
   thread t_k(keyboard_input, main_window);
+  // game over
+  thread t_go(gameOver);
 
   //mvwprintw(information_window, 10, 13, "1"); Miejsce, w którym jest liczba jedności naszego score
 
@@ -140,6 +148,7 @@ void create_threads()
   tp.join();
   t_r.join();
   t_k.join();
+  t_go.join();
 }
 
 void initialize_objects()
